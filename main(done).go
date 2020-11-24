@@ -16,7 +16,7 @@ func compressHTML(url string) ([]byte, int) {
 	}
 
 	html := getHTML(url)
-	for i := 0; i<len(html)-1; i++ {
+	for i := 0; i<len(html)-2; i++ {
 
 		if string(html[i:i+7]) == "<script" {
 			//fmt.Println("SCRIPT START")
@@ -30,7 +30,7 @@ func compressHTML(url string) ([]byte, int) {
 		
 		if ignoreJavascript == false {
 			//return
-			if html[i] == 13 {
+			if html[i] == 10 {
 			html = remove(html, i)
 					reduction++;
 			}
