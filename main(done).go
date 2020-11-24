@@ -1,12 +1,15 @@
 package main
 
 import (
-	"fmt"
+  "fmt"
   "net/http"
   "io/ioutil"
 )
 
 func compressHTML(url string) ([]byte, int) {
+
+	var ignoreJavascript bool = false
+
 	var reduction int = 0; 
 	remove := func(s []byte, i int) []byte {
 		return append(s[:i], s[i+1:]...)
@@ -15,22 +18,38 @@ func compressHTML(url string) ([]byte, int) {
 	html := getHTML(url)
 	for i := 0; i<len(html)-1; i++ {
 
-    //return
-    if html[i] == 13 {
-      html = remove(html, i)
-			reduction++;
-    }
+		if string(html[i:i+7]) == "<script" {
+			//fmt.Println("SCRIPT START")
+			ignoreJavascript = true;
+		}
 
-    //Space
-		for html[i + 1] == 32 && html[i] == 32 {
+		if string(html[i:i+8]) == "</script>" {
+			//fmt.Println("SCRIPT START")
+			ignoreJavascript = false;
+		}
+		
+		if ignoreJavascript == false {
+			//return
+			if html[i] == 13 {
 			html = remove(html, i)
-			reduction++;
+					reduction++;
+			}
+
+			//Space
+			for html[i + 1] == 32 && html[i] == 32 {
+				html = remove(html, i)
+					reduction++;
+			}
 		}
     
 
-		}
+	}
+
+	fmt.Println(string(html))
+	fmt.Println(reduction)
+
 		
-		return html, reduction
+	return html, reduction
 }
 
 func main() {
