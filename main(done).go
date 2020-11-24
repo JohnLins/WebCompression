@@ -19,12 +19,10 @@ func compressHTML(url string) ([]byte, int) {
 	for i := 0; i<len(html)-2; i++ {
 
 		if string(html[i:i+7]) == "<script" {
-			//fmt.Println("SCRIPT START")
 			ignoreJavascript = true;
 		}
 
 		if string(html[i:i+8]) == "</script>" {
-			//fmt.Println("SCRIPT START")
 			ignoreJavascript = false;
 		}
 		
@@ -53,13 +51,9 @@ func compressHTML(url string) ([]byte, int) {
 }
 
 func main() {
-
-  var compressedHTML, reduction = compressHTML("http://linsintegrations.co")
-	
-	fmt.Println(string(compressedHTML))
-
-  fmt.Println(reduction, "B")
-	 
+var compressedHTML, reduction = compressHTML("http://linsintegrations.co")	
+fmt.Println(string(compressedHTML))
+fmt.Println(reduction, "B")	 
 }
 
 func getHTML(url string) []byte {
